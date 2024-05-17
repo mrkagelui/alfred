@@ -1,0 +1,23 @@
+services:
+  db:
+    image: postgres:16-alpine
+    command: -c 'max_connections=100'
+    ports:
+      - "${DB_PORT:-5440}:5432"
+    volumes:
+      - ./schema/alfred.sql:/docker-entrypoint-initdb.d/init.sql
+    environment:
+      - POSTGRES_DB=alfred
+      - POSTGRES_USER=alfred
+      - POSTGRES_PASSWORD=mast3r_wayne
+
+  source:
+    image: postgres:16-alpine
+    ports:
+      - "${SRC_DB_PORT:-5441}:5432"
+    volumes:
+      - ./schema/source.sql:/docker-entrypoint-initdb.d/init.sql
+    environment:
+      - POSTGRES_DB=source
+      - POSTGRES_USER=source
+      - POSTGRES_PASSWORD=sup3r_secret
